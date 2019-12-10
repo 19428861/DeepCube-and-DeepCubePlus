@@ -1,4 +1,4 @@
-# deepcube-full
+# DeepCube
 > flask实现的一个完整的项目，用于在自己的服务器上部署DeepCubeA算法并可视化。
 ## 特别注意
 1. 本项目要求在大内存下运行，本地运行需要2G内存
