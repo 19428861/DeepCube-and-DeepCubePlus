@@ -5,7 +5,9 @@
 2. app.py为服务器运行文件，其中两个solve择一即可
     - 第一个solve函数为运行本地GPU计算
     - 第二个solve函数为调用原网页解法API
-
+3. 在app.py中，增加这一行可以实现直接python app.py即可，这一行作用是指定使用GPU 0
+    >os.environ['CUDA_VISIBLE_DEVICES']='0'
+    
 ## 环境要求
 1. Linux环境，非windows即可，本地mac、服务器CentOS、本地Ubuntu均测试成功
 2. python == 2.7
@@ -16,8 +18,7 @@
 ## 启动过程
 1. pip install -r requirements.txt
 2. cd flask
-3. export CUDA_VISIBLE_DEVICES="0"
-4. python app.py
+3. python app.py
 
 ## 目录结构安排
 1. code
