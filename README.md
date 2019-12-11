@@ -1,13 +1,15 @@
 # DeepCube
-> flask实现的一个完整的项目，用于在自己的服务器上部署DeepCubeA算法并可视化。
+flask实现的一个完整的项目，用于在自己的服务器上部署DeepCubeA算法并可视化。
 ## 特别注意
 1. 本项目要求在大内存下运行，本地运行需要2G内存
 2. app.py为服务器运行文件，其中两个solve择一即可
     - 第一个solve函数为运行本地GPU计算
     - 第二个solve函数为调用原网页解法API
-3. 在app.py中，增加这一行可以实现直接python app.py即可，这一行作用是指定使用GPU 0
-    >os.environ['CUDA_VISIBLE_DEVICES']='0'
-    
+3. 在app.py中，增加这一行
+    ```
+    os.environ['CUDA_VISIBLE_DEVICES']='0'
+    ```
+   可以实现直接python app.py即可，作用是指定使用GPU 0
 ## 环境要求
 1. Linux环境，非windows即可，本地mac、服务器CentOS、本地Ubuntu均测试成功
 2. python == 2.7
@@ -16,10 +18,11 @@
 5. 其他包要求在requirments.txt
 
 ## 启动过程
-1. pip install -r requirements.txt
-2. cd flask
-3. python app.py
-
+```
+pip install -r requirements.txt
+cd flask
+python app.py
+```
 ## 目录结构安排
 1. code
     - 存放深度学习求解魔方模型的代码
