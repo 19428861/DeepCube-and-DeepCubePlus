@@ -6,6 +6,7 @@ import os
 import sys
 import numpy as np
 
+os.environ['CUDA_VISIBLE_DEVICES']='0'  # 增加这一行可以实现直接python app.py即可 这一行作用是指定使用GPU 0
 o_path = os.getcwd()
 sys.path.append(o_path)
 sys.path.append('../')
