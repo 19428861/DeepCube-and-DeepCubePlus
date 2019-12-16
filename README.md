@@ -1,4 +1,4 @@
-# DeepCubePlus
+# DeepCube & DeepCubePlus
 flask实现的一个完整的项目，用于在自己的服务器上部署DeepCubeA算法并可视化。
 ## 1. DeepCube
 ### 1.1 特别注意
