@@ -54,36 +54,92 @@ anglesSet = {24: [2, 20, 44], 25: [0, 26, 47], 34: [8, 35, 38], 35: [6, 29, 53],
 
 @app.route('/')
 def mainPage():
-    return render_template('index.html')
+    return render_template('index.plus.html')
 
 @app.route('/initState', methods=['POST'])
 def initState():
     data = {'FEToState': FEToState, 'legalMoves': legalMoves, 'rotateIdxs_new': rotateIdxs_new, 'rotateIdxs_old': rotateIdxs_old, 'state': state, 'stateToFE': stateToFE}
     return jsonify(data)
 
+
+def reOrderArray(arr, indecies):
+    temp = []
+    for i in range(len(indecies)):
+        index = indecies[i]
+        temp.append(arr[index])
+    return temp
+
+def color2Status(color):
+    status = [0] * 54
+    for i in range(6):
+        status[4 + i * 9] = 4 + i * 9
+    for edge in edges:
+        color1 = color[edge[0]]
+        color2 = color[edge[1]]
+        if color1 > color2:
+            hColor = color1
+            lColor = color2
+            hIdx = edge[0]
+            lIdx = edge[1]
+        else:
+            hColor = color2
+            lColor = color1
+            hIdx = edge[1]
+            lIdx = edge[0]
+        edgeIdx = 10 * lColor + hColor
+        if edgeIdx in edgesSet.keys():
+            edgeStatus = edgesSet[edgeIdx]
+        else:
+            print("not in leng")
+            return False
+        status[lIdx] = edgeStatus[0]
+        status[hIdx] = edgeStatus[1]
+    for angle in angles:
+        angleColor = [color[angle[0]], color[angle[1]], color[angle[2]]]
+        sortColor = []
+        for i in angleColor:
+            sortColor.append(i)
+        sortColor.sort()
+        idxArr = []
+        angleIdx = 0
+        for i in range(3):
+            angleIdx = sortColor[i] + angleIdx * 10
+            for j in range(3):
+                if angleColor[j] == sortColor[i]:
+                    idxArr.append(angle[j])
+                    break
+        if angleIdx in anglesSet.keys():
+            angleStatus = anglesSet[angleIdx]
+        else:
+            print("not in jiao")
+            return False
+        for i in range(3):
+            status[idxArr[i]] = angleStatus[i]
+    # print(status)
+    for checkStickers in range(0, 54):
+        if checkStickers not in status:
+            return False
+    return status
+
 '''
 @app.route('/solve', methods=['POST'])
 def solve():
-    # FEToState = [6, 3, 0, 7, 4, 1, 8, 5, 2, 15, 12, 9, 16, 13, 10, 17, 14, 11, 24, 21, 18, 25, 22, 19, 26, 23, 20, 33, 30, 27, 34, 31, 28, 35, 32, 29, 38, 41, 44, 37, 40, 43, 36, 39, 42, 51, 48, 45, 52, 49, 46, 53, 50, 47]
-    # data = request.get_data()
-    # print(data)
     stateUnicode = request.form.get('state')
-    # print(stateUnicode)
     stateStr = stateUnicode.encode('utf-8')
-    # print(type(stateStr))
     stateStr = stateStr.replace("[", "")
     stateStr = stateStr.replace("]", "")
-    # print(stateStr)
     stateSpilt = stateStr.split(",")
-    stateArray = []
+    colorArray = []
     for stickers in stateSpilt:
-        stateArray.append(int(stickers))
-    # print(stateArray)
-    # print(len(stateArray))
+        colorArray.append(int(stickers) // 9)
+    stateArray = color2Status(colorArray)
+    if stateArray == False:
+        print("error")
+        data = {'moves': [], 'moves_rev': [], 'solve_text': [], 'state': [], 'error': 1}
+        return data
     stateArray2 = reOrderArray(stateArray, FEToState)
     state = np.array(stateArray2)
     soln = nnetSolve.solve(state)
-    # moves = ["U_-1", "R_1", "B_1", "F_1", "U_1", "U_1", "F_1", "U_-1", "B_1", "D_1", "U_-1", "B_-1", "U_1", "L_1", "D_1", "L_-1", "U_-1", "F_-1", "R_1", "D_1", "D_1", "R_-1", "U_-1", "R_1", "D_-1"]
     moves = []
     moves_rev = []
     solve_text = []
@@ -96,16 +152,8 @@ def solve():
             moves.append(step[0] + "_1")
             moves_rev.append(step[0] + "_-1")
             solve_text.append(step[0])
-    data = {'moves': moves, 'moves_rev': moves_rev, 'solve_text': solve_text}
-    # print data
+    data = {'moves': moves, 'moves_rev': moves_rev, 'solve_text': solve_text, 'state': stateArray, 'error': 0}
     return jsonify(data)
-
-def reOrderArray(arr, indecies):
-    temp = []
-    for i in range(len(indecies)):
-        index = indecies[i]
-        temp.append(arr[index])
-    return temp
 '''
 
 
@@ -113,8 +161,27 @@ def reOrderArray(arr, indecies):
 def solve():
     url = 'http://deepcube.igb.uci.edu'
     import requests
-    state = request.form.get('state')
-    r = requests.post(url + '/solve', data={'state': state})
+    # state = request.form.get('state')
+
+    stateUnicode = request.form.get('state')
+    stateStr = stateUnicode.encode('utf-8')
+    stateStr = stateStr.replace("[", "")
+    stateStr = stateStr.replace("]", "")
+    stateSpilt = stateStr.split(",")
+    colorArray = []
+    for stickers in stateSpilt:
+        colorArray.append(int(stickers) // 9)
+    stateArray = color2Status(colorArray)
+    if stateArray == False:
+        print("error")
+        data = {'moves': [], 'moves_rev': [], 'solve_text': [], 'state': [], 'error': 1}
+        return data
+    # stateArray2 = reOrderArray(stateArray, FEToState)
+    # state = np.array(stateArray2)
+    import re
+    state = re.sub(' ', '', str(stateArray))
+
+    r = requests.post(url + '/solve', data={'state': str(state)})
     key = json.loads(r.text)    # json content
     return jsonify(key)
 
