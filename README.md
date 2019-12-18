@@ -1,6 +1,6 @@
 # DeepCube & DeepCubePlus
 flask实现的一个完整的项目，用于在自己的服务器上部署DeepCubeA算法并可视化。
-## 1. DeepCube
+## 1. [DeepCube](http://czx.ac.cn/deepcube)
 ### 1.1 特别注意
 1. 本项目要求在大内存下运行，本地运行需要2G内存
 2. app.py为服务器运行文件，其中两个solve择一即可
@@ -52,7 +52,7 @@ python app.py
 1. Agostinelli, Forest, et al. "Solving the Rubik’s cube with deep reinforcement learning and search." Nature Machine Intelligence 1.8 (2019): 356-363.[[link]](https://www.nature.com/articles/s42256-019-0070-z.epdf?shared_access_token=-pCSsZa_J9bM8VyXLZLRctRgN0jAjWel9jnR3ZoTv0Osb8UCgUm5AQaSCMHWqWzsyV3KBcb13SAW-9IL1pAGd1HcSk40JSEjhoaBAi0ePvYh_5Dul6LvK0oJY1KI0ULo9O9HCut_y7aCTc93Th8m5g%3D%3D)
 2. [DeepCubeA](https://codeocean.com/capsule/5723040/tree/v1) Source Code.
 
-## 2. DeepCubePlus
+## 2. [DeepCubePlus](http://czx.ac.cn/deepcubeplus)
 ### 2.1 更新说明
 在实现了DeepCube简单克隆之后，在Plus版中增加了以下前台功能：
 1. 自由输入方式：旋转序列、涂色
